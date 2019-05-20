@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif;
+    max-width: 750px;
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+.pull-left {
+    float: left
+}
+
+.pull-right {
+    float: right
+}
+
+.clear:after {
+    content: "";
+    height: 0;
+    display: block;
+    overflow: hidden;
+    clear: both
+}
+
+.text-left {
+    text-align: left
+}
+
+.text-center {
+    text-align: center
+}
+
+.text-right {
+    text-align: right
+}
+
+.show {
+    display: block
+}
+
+.hide {
+    display: none;
+}
+
+.visible {
+    visibility: hidden
+}
+
+.red {
+    color: red;
+}
+
+/*tabBar*/
+#tabBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 7.5rem;
+    height: 1rem;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    background: #fff;
+    z-index: 99;
+}
+
+#index {
+    background-image: url('../img/tab1.png');
+}
+
+#find {
+    background-image: url('../img/tab2.png');
+}
+
+#mine {
+    background-image: url('../img/tab3.png');
+}
+
+#index.active {
+    background-image: url('../img/tab1-active.png');
+}
+
+#find.active {
+    background-image: url('../img/tab2-active.png');
+}
+
+#mine.active {
+    background-image: url('../img/tab3-active.png');
+}
+
+.tab-item {
+    display: block;
+    padding-top: .56rem;
+    height: .44rem;
+    line-height: .44rem;
+    font-size: .2rem;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: .44rem .44rem;
+    background-position: center .14rem;
+    min-width: 30%;
+    color: #9B9B9B;
+}
+
+.tab-item.active {
+    color: #9013FE
+}
+
+/*title*/
+#title {
+    width: 7.5rem;
+    height: .88rem;
+    line-height: .88rem;
+    color: #000000;
+    font-family: 'Semibold';
+    text-align: center;
+    font-size: .36rem;
+    font-weight: 600;
+    position: fixed;
+    top:0;left:0;
+    z-index: 9;
+    background: #fff;
+}
+
+/*return-index*/
+#title-area{
+    width:7.5rem;
+    height:.88rem;
+    line-height:.88rem;
+    font-size: .36rem;
+    text-align: center;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 99;
+    background: #fff;
+    font-weight: 600;
+    transition: .5s;
+}
+#return-back {
+    width: 1.2rem;
+    height: .88rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("../img/return-back.png") no-repeat center center;
+    background-size: .25rem .44rem;
+
+}
+#return-index {
+    width: .96rem;
+    height: .96rem;
+    position: fixed;
+    right: .4rem;
+    bottom: 3.6rem;
+    background: url("../img/return-index.png") no-repeat;
+    border-radius: 50%;
+    background-size: 100% 100%;
+    overflow: hidden;
+    z-index: 999;
+}
+
+
+

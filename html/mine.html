@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="../css/mine.css"/>
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+<div id="title">个人中心</div>
+<div id="login-area" class="login">
+    <div class="pull-left user-avatar"></div>
+    <div class="pull-left user-info">
+        <p class="user-info-tel" id="user-info-tel"></p>
+        <!--<p class="user-info-vip" id="user-info-vip">当前会员：<span></span></p>-->
+        <p class="user-info-id">ID：<span id="user-info-id"></span></p>
+        <!--<p class="user-info-power">权限：<span id="user-info-power">剩余单套浏览权限 1 次</span></p>-->
+
+    </div>
+</div>
+<div class="line-area">
+    <div class="hide" id="vip" data-href="vip.html"><p class="line-p">开通VIP</p></div>
+    <div id="buyHistory" data-href="buyHistory.html"><p class="line-p">已购买的</p></div>
+    <div id="collection" data-href="collection.html"><p class="line-p">我的收藏</p></div>
+    <a id="customService" href="customService.html"><p class="line-p">客服帮助</p></a>
+    <p class="line-p hide" id="outLogin">退出登录</p>
+
+</div>
+
+
+<a href="../index.html" id="return-index"></a>
+<div id="tabBar">
+    <a href="../index.html" class="tab-item" id="index">推荐</a>
+    <a href="find.html" class="tab-item" id="find">发现</a>
+    <a href="javascript:;" class="tab-item active" id="mine">我的</a>
+</div>
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script type="text/javascript">
+    var Mine = function () {}
+    Mine.prototype.init = function () {
+        var _this = this;
+        this.reset();
+
+    }
+    Mine.prototype.reset = function () {
+        var _this = this;
+        this.$loginArea = $('#login-area');
+
+        this.userInfoTel = $('#user-info-tel');
+        // this.userInfoVip = $('#user-info-vip');
+        this.userInfoId = $('#user-info-id');
+        // this.userInfoPower = $('#user-info-power');
+
+        this.$vip = $('#vip');
+        this.$buyHistory = $('#buyHistory');
+        this.$collection = $('#collection');
+        this.$customService = $('#customService');
+        this.$outLogin = $('#outLogin');
+        this.token = getCookie('dmhToken');
+        if(!this.token){//未登录
+            this.loginStatus = '2';
+            _this.$loginArea.addClass('login').html('<div class="pull-left user-avatar"></div><div class="pull-left user-logion-word">注册/登录</div>')
+        }else{
+            $.ajax({
+                type: 'get',
+                url: 'http://' + host + '/api/client/me',
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("Authorization","bearer " + _this.token);
+                },
+                success: function (res) {
+                    console.log(res)
+                    if(res.code == '0'){
+                        //TODO 显示用户信息
+                        var data = res.data;
+                        if(data.login_times == '1'){//有一次免费预约的机会
+                            _this.loginStatus2 = '1';
+                        }
+                        _this.loginStatus = '1';
+                        _this.$outLogin.removeClass('hide');
+                        _this.userInfoTel.html(data.mobile);
+                        // _this.userInfoVip.html(data.level_label);
+                        _this.userInfoId.html(data.show_id);
+                        // _this.userInfoPower.html();
+
+                    }else{//过期了 需要重新登录
+                        _this.loginStatus = '2';
+                        _this.$loginArea.addClass('login').html('<div class="pull-left user-avatar"></div><div class="pull-left user-logion-word">注册/登录</div>');
+                    }
+                }
+            })
+        }
+
+        this.$loginArea.off('click').on('click',function () {
+            if($(this).hasClass('login')){
+                window.location.href = 'login.html';
+            }
+
+
+        })
+
+        this.$vip.off('click').on('click',function () {
+            if(_this.loginStatus == '1'){
+                window.location.href = $(this).attr('data-href');
+            }else{
+                window.location.href = 'login.html';
+            }
+        })
+        this.$buyHistory.off('click').on('click',function () {
+            if(_this.loginStatus == '1'){
+                window.location.href = $(this).attr('data-href');
+            }else{
+                window.location.href = 'login.html';
+            }
+        })
+        this.$collection.off('click').on('click',function () {
+            if(_this.loginStatus == '1'){
+                window.location.href = $(this).attr('data-href');
+            }else{
+                window.location.href = 'login.html';
+            }
+        })
+        this.$customService.off('click').on('click',function () {
+            if(_this.loginStatus == '1'){
+                window.location.href = $(this).attr('data-href');
+            }else{
+                window.location.href = 'login.html';
+            }
+        })
+
+
+        //退出登录
+        this.$outLogin.off('click').on('click',function () {
+            $.ajax({
+                type: 'post',
+                url: 'http://' + host + '/api/client/logout',
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("Authorization", "bearer " + _this.token);
+                },
+                success: function (res) {
+                    console.log(res)
+                    if(res.code == '0'){
+                        window.location.reload();
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+            })
+        })
+
+    }
+
+    new Mine().init();
+</script>
+</html>

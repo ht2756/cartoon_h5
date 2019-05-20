@@ -1,0 +1,77 @@
+#content-area{
+    width: 7.5rem;
+    margin-top:.88rem;
+    overflow: hidden;
+}
+.logo{
+    width:1.16rem;
+    height: 1.16rem;
+    margin:1rem auto .85rem;
+    background: url('../img/login-logo.png') no-repeat;
+    background-size: 100% 100%;
+}
+
+
+#login-box{
+    width: 6.3rem;
+    margin:0 auto;
+}
+.login-p{
+    height: 1rem;
+    width:5.23rem;
+    padding-left: .97rem;
+    border-bottom: .01rem solid #979797;
+}
+.login-p input{
+    height: .98rem;
+    line-height: .98rem;
+    color:#4A4A4A;
+    border:none;
+    outline: none;
+    font-size: .36rem;
+}
+.login-tel-p{
+    background: url("../img/login-tel.png") no-repeat;
+    background-size: .37rem .42rem;
+    background-position: left center;
+}
+.login-code-p{
+    background: url("../img/login-code.png") no-repeat;
+    background-size: .37rem .42rem;
+    background-position: left center;
+}
+#login-tel{
+    width: 5rem;
+}
+#login-code{
+    width: 3rem;
+}
+#getCode{
+    height: 1rem;
+    line-height: 1rem;
+    padding:0 .2rem;
+    color:#4A4A4A;
+    font-size: .36rem;
+}
+#sure-btn{
+    margin: .6rem auto 0;
+    width: 6.3rem;
+    height: .88rem;
+    line-height: .88rem;
+    background: #9013FE;
+    text-align: center;
+    font-size: .36rem;
+    color:#fff;
+    border-radius: .1rem;
+}
+.login-tip{
+    height: .44rem;
+    line-height: .44rem;
+    font-size: .24rem;
+    color:#4A4A4A;
+    text-align: center;
+    margin-top:.2rem;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #A1A1A3
+}

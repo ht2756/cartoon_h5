@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/index2.css">
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+<div id="title"><span></span><a href="javascript:history.go(-1);" id="return-back"></a></div>
+<div id="wrapper" style="margin:1.28rem auto 1.1rem;height:calc(100vh - 2.38rem);">
+    <div id="information-box2">
+        <a href="bookTip.html" id="book-tip">防止走丢，强烈建议添加浏览器书签<span class="book-tip2">怎么添加</span></a>
+        <div id="information-box">
+
+        </div>
+        <div id="load-more" class="load-more hide">正在加载...</div>
+    </div>
+
+</div>
+<a href="../index.html" id="return-index"></a>
+<div id="tabBar">
+    <a href="javascript:;" class="tab-item active" id="index">推荐</a>
+    <a href="find.html" class="tab-item" id="find">发现</a>
+    <a href="mine.html" class="tab-item" id="mine">我的</a>
+</div>
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script src="../components/lazyload/lazyload.min.js"></script>
+<script src="../components/iscroll/iscroll.min.js"></script>
+<script>
+    var Index2 = function () {
+    }
+
+    Index2.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Scroll();
+        this.loadInformation();
+    }
+    Index2.prototype.reset = function () {
+        var _this = this;
+        this.page = 1;
+        this.loadFlag = false;
+        this.noData = false;
+
+        this.$title = $('#title');
+        this.$loadMore = $('#load-more');
+        this.$inforamtionBox = $('#information-box');
+        this.flag = getQueryString('flag');
+        if (this.flag == '1') {
+            this.$title.find('span').html('美图专区');
+        } else if (this.flag == '2') {
+            this.$title.find('span').html('漫画专区');
+        }
+    }
+    Index2.prototype.init4Scroll = function () {
+        console.log('scroll')
+        var _this = this;
+        this.myScroll = new iScroll('wrapper', {
+            useTransition: true,
+            topOffset: 0,
+            onScrollMove: function () {
+                if(this.y - this.maxScrollY < 20){
+                    if(!!_this.noData){
+                        return false;
+                    }
+                    _this.loadInformation();
+                }
+            }
+        })
+    }
+
+    Index2.prototype.loadInformation = function () {
+        var _this = this;
+        if(!!this.loadFlag){
+            return false;
+        }
+        this.loadFlag = true;
+        this.$loadMore.removeClass('hide');
+
+        if(_this.flag == '1'){
+            var url = 'http://' + host + '/api/client/pictures';
+        }else{
+            var url = 'http://' + host + '/api/client/cartoons';
+        }
+
+        $.ajax({
+            type: 'get',
+            url: url,
+            data: {
+                page: _this.page,
+            },
+            success: function (res) {
+                console.log(res)
+                if (res.code == '0') {
+                    _this.page++;
+                    _this.data = res.data;
+                    if(_this.data.data.length == '0'){
+                        _this.noData = true;
+                        _this.$loadMore.html('暂无数据').delay(500).addClass('hide');
+                        return false;
+                    }
+                    console.log(_this.data)
+                    _this.base_url = _this.data.base_url;
+                    if (_this.flag == '1') {
+                        _this.loadPic();
+                    } else if (_this.flag == '2') {
+                        _this.loadComic();
+                    }
+                }
+            }
+        })
+    }
+    Index2.prototype.loadPic = function () {
+        var _this = this;
+        var str = '';
+        for (var i = 0; i < this.data.data.length; i++) {
+            var item = this.data.data[i];
+            str += '<a href="detailPic.html?id=' + item.id + '"><div class="pic-item clear">' +
+                '        <div class="pic-item-title">' + item.name + '</div>' +
+                '        <div class="pic-item-content">' + item.intro + '</div>' +
+                '        <div class="pic-box pic-item-pic-content">';
+            for(var a = 0;a<item.images.length;a++){
+                var it = item.images[a];
+                if(a <= '2'){
+                    str += '<img class="lazy" data-original="' + _this.base_url +it + '" alt=""/>';
+                }
+            }
+            str +='        </div>' +
+                '    </div></a>'
+        }
+        this.$inforamtionBox.append(str);
+        this.loadFlag = false;
+        this.$loadMore.addClass('hide');
+        $("img.lazy").lazyload();
+        this.myScroll.refresh();
+    }
+
+    Index2.prototype.loadComic = function () {
+        var _this = this;
+        var str = '';
+        for (var i = 0; i < this.data.data.length; i++) {
+            var item = this.data.data[i];
+            str += '<a href="menu.html?id=' + item.id + '"><div class="comic-item clear">'+
+                    '<div class="comic-item-pic pull-left"><img class="lazy" data-original="' + _this.base_url + item.thumb + '" alt=""/></div>'+
+                    '<div class="comic-item-content-box pull-left">'+
+                    '<div class="comic-item-title">' + item.name + '</div>'+
+                    '<div class="comic-item-content">' + item.intro + '</div>'+
+                    '</div>'+
+                '</div></a>';
+        }
+        this.$inforamtionBox.append(str);
+        this.loadFlag = false;
+        this.$loadMore.addClass('hide');
+        $("img.lazy").lazyload();
+        this.myScroll.refresh();
+    }
+
+    new Index2().init();
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+</script>
+</html>

@@ -1,0 +1,122 @@
+#swiper{
+    width:7.5rem;
+    height:3.12rem;
+    background-size: 100% 100%;
+    margin-top: .88rem;
+}
+#book-tip {
+    display: block;
+    width: 6.4rem;
+    height: .72rem;
+    line-height: .72rem;
+    margin: .4rem auto;
+    background: url("../img/book-tip.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    text-indent: .7rem;
+    font-size: .24rem;
+    color: #fff;
+}
+
+.book-tip2 {
+    display: block;
+    background: url("../img/book-tip2.png") no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1.73rem;
+    height: .72rem;
+    line-height: .72rem;
+    text-align: center;
+    color: #fff;
+    text-indent: 0;
+}
+#comic-area{
+    width:6.7rem;
+    margin:0 auto 1.2rem;
+}
+.comic-title{
+    width:6.4rem;
+    height:.62rem;
+    line-height:.62rem;
+    font-size: .3rem;
+    color:#4A4A4A
+}
+
+#comic-description{
+    margin-top: .14rem;
+    font-size: .24rem;
+    line-height:.28rem;
+    color:#9B9B9B;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    margin-bottom:.4rem;
+}
+#last-update{
+    margin-top: .15rem;
+    font-size:.24rem;
+    height:.28rem;
+    line-height: .28rem;
+    color:#9B9B9B
+}
+
+#comic-content{
+    margin-top:.4rem;
+}
+.comic-item{
+    width:1.2rem;
+    height:.54rem;line-height:.54rem;
+    border-radius:.1rem;
+    border:.01rem solid #9B9B9B;
+    margin-bottom:.4rem;
+    margin-right: .6rem;
+    text-align: center;
+    color:#9B9B9B;
+    float: left;
+}
+.comic-item.lock{
+    background: url("../img/lock.png") no-repeat;
+    background-size: .14rem .17rem;
+    background-position: 1.02rem .32rem;
+
+}
+.comic-item:nth-of-type(4n+0){
+    margin-right:0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#buy-area{
+    width:7.5rem;
+    height:1rem;
+    line-height:1rem;
+    background:#fff;
+    position: fixed;
+    bottom:0;
+    left:0;
+    z-index: 999;
+}
+#buy-btn{
+    width:2.4rem;
+    height:1rem;
+    background: #9013FE;
+    line-height:1rem;
+    text-align: center;
+    color:#fff;
+    font-size:.32rem;
+}

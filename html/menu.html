@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title></title>
+</head>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/menu.css">
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+    <div id="title"><span id="menu-title"></span><a href="javascript:history.go(-1);" id="return-back"></a></div>
+    <div id="swiper"></div>
+    <a href="bookTip.html" id="book-tip">防止走丢，强烈建议添加浏览器书签<span class="book-tip2">怎么添加</span></a>
+    <div id="comic-area">
+        <div class="comic-title" id='comic-title'></div>
+        <div id="comic-description"></div>
+        <div class="comic-title">选集</div>
+        <div id="last-update">最后更新：<span></span></div>
+        <div id="comic-content">
+
+        </div>
+    </div>
+
+    <a href="../index.html" id="return-index"></a>
+    <div id="buy-area">
+        <div id="buy-btn" class="pull-right">继续阅读</div>
+    </div>
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script>
+
+    var Menu = function (){}
+    Menu.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Event();
+        this.loadMenu();
+    }
+    Menu.prototype.reset = function () {
+        var _this = this;
+        this.id = getQueryString('id') || '';
+        this.$menuTitle = $('#menu-title');
+        this.$swiper = $('#swiper');
+        this.$comicTitle = $('#comic-title');
+        this.$comicDescription = $('#comic-description');
+        this.$lastUpdate = $('#last-update').find('span');
+        this.$comicContent = $('#comic-content');
+    }
+    Menu.prototype.init4Event= function () {
+        var _this = this;
+
+
+    }
+    Menu.prototype.loadMenu = function () {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://' + host + '/api/client/cartoons/' + _this.id,
+            success:function (res){
+                console.log(res);
+                if(res.code == '0'){
+                    var data = res.data;
+                    _this.$menuTitle.html(data.name);
+                    _this.$comicTitle.html(data.name);
+                    _this.$swiper.css({'backgroundImage':'url(' + data.base_url + data.thumb + ')'});
+                    _this.$comicDescription.html(data.intro);
+                    _this.$lastUpdate.html(data.updated_at);
+                    var cartoons = data.cartoons;
+                    var str = '';
+                    for (var i =0;i<cartoons.length ;i++){
+                        var item = cartoons[i];
+                        if(item.auth == '1'){
+                            str += '<a href="detailComic.html?id=' + item.id + '" class="comic-item">' + item.title + '</a>';
+                        }else{
+                            str += '<a href="javascript:;" class="comic-item lock">' + item.title + '</a>';
+                        }
+                    }
+                    _this.$comicContent.html(str);
+                    _this.init4LoadComicDetail();
+                }else{
+                    alert(res.msg);
+                }
+            }
+        })
+    }
+    Menu.prototype.init4LoadComicDetail = function () {
+        var _this = this;
+
+    }
+
+    new Menu().init();
+
+
+
+</script>
+</html>

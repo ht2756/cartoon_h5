@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+<link rel="stylesheet" href="../css/login.css">
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+<div id="title"><span>登录/注册</span><a href="javascript:history.go(-1);" id="return-back"></a></div>
+<div id="content-area">
+    <div class="logo"></div>
+    <div id="login-box">
+        <div class="login-p login-tel-p">
+            <input type="text" id="login-tel" maxlength="11" placeholder="请输入手机号">
+        </div>
+        <div class="login-p login-code-p">
+            <input type="text" id="login-code" maxlength="4" placeholder="请输入验证码" class="pull-left">
+            <div id="getCode" class="pull-right">获取验证码</div>
+        </div>
+        <div id="sure-btn">立即登录</div>
+        <div class="login-tip">新手机将自动生成新账户，已注册用户直接登</div>
+    </div>
+</div>
+<a href="../index.html" id="return-index"></a>
+<script src="../js/jquery1.12.4.js"></script>
+<script>
+    var Login = function(){};
+    Login.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Event();
+
+    }
+    Login.prototype.reset = function () {
+        var _this = this;
+
+        this.loginFlag = true;
+        this.loginTime = 60;
+
+        this.$loginTel = $('#login-tel');
+        this.$loginCode = $('#login-code');
+        this.$getCode = $('#getCode');
+        this.$sureBtn = $('#sure-btn');
+
+
+    }
+    Login.prototype.init4Event = function () {
+        var _this = this;
+        this.$getCode.off('click').on('click',function (){
+            if(!_this.loginFlag){
+                return false;
+            }
+            var mobile = _this.$loginTel.val();
+            if(!/^\d{11}$/.test(mobile)){
+                alert('请正确填写手机号码');
+                return false;
+            }
+            _this.loginCutDown();
+            _this.loginFlag = false;
+            $.ajax({
+                type:'POST',
+                url:'http://' + host + '/api/smscode',
+                data:{
+                    mobile:mobile
+                },
+                success:function (res) {
+                    if(res.code == '0'){
+                        alert('验证码已发送');
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+            })
+        })
+        this.$sureBtn.off('click').on('click',function () {
+            var mobile = _this.$loginTel.val();
+            if(!/^\d{11}$/.test(mobile)){
+                alert('请正确填写手机号码');
+                return false;
+            }
+            var code = _this.$loginCode.val();
+            if(!/^\d{4}$/.test(code)){
+                alert('请正确填写验证码');
+                return false;
+            }
+            $.ajax({
+                type:'POST',
+                url:'http://' + host + '/api/login_by_code',
+                data:{
+                    mobile:mobile,
+                    code:code
+                },
+                success:function (res) {
+                    if(res.code == '0'){
+                        console.log(code);
+                        var taccess_token = res.data.access_token;
+                        setCookie('dmhToken',taccess_token);
+                        alert('登陆成功');
+                        history.go(-1);
+                        // window.location.href = 'mine.html';
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+            })
+
+
+        })
+
+
+    }
+    Login.prototype.loginCutDown = function () {
+        var _this = this;
+        this.$getCode.html(this.loginTime);
+        setTimeout(function () {
+            _this.loginTime--;
+            if(_this.loginTime == '0'){
+                _this.loginFlag = true;
+                _this.$getCode.html('获取验证码');
+                return false;
+            }
+            _this.$getCode.html(_this.loginTime);
+            setTimeout(arguments.callee,1000);
+        },1000)
+    }
+
+    new Login().init();
+</script>
+</body>
+</html>

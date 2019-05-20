@@ -1,0 +1,141 @@
+#return-back {
+    width: 1.2rem;
+    height: .88rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("../img/return-back.png") no-repeat center center;
+    background-size: .25rem .44rem;
+
+}
+
+#book-tip {
+    display: block;
+    width: 6.4rem;
+    height: .72rem;
+    line-height: .72rem;
+    margin: 0 auto .4rem;
+    background: url("../img/book-tip.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    text-indent: .7rem;
+    font-size: .24rem;
+    color: #fff;
+}
+
+.book-tip2 {
+    display: block;
+    background: url("../img/book-tip2.png") no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1.73rem;
+    height: .72rem;
+    line-height: .72rem;
+    text-align: center;
+    color: #fff;
+    text-indent: 0;
+}
+
+#information-box {
+    width: 6.7rem;
+    margin:0 auto;
+}
+
+/*pic*/
+.pic-item{
+    margin-bottom:.4rem;
+}
+.pic-item-title {
+    height: .34rem;
+    line-height: .34rem;
+    font-size: .3rem;
+    color: #4A4A4A;
+    font-weight:600;
+
+}
+
+.pic-item-content {
+    height: .44rem;
+    line-height: .44rem;
+    font-size: .24rem;
+    color: #9B9B9B;
+    width:100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pic-box {
+    height: 2rem;
+    margin-top: .1rem;
+}
+
+.pic-box img {
+    width: 2rem;
+    height: 2rem;
+    margin-right: .35rem;
+    display: inline-block;
+}
+.pic-box img:last-child{
+    margin-right: 0;
+}
+
+/*comic*/
+.comic-item{
+    margin-bottom:.4rem;
+    overflow: hidden;
+}
+.comic-item-pic,.comic-item-pic img{
+    width:2.4rem;
+    height:1.5rem;
+    margin-right: .2rem;
+}
+.comic-item-content-box{
+    width:4.1rem;
+
+}
+.comic-item-title{
+    height:.4rem;
+    font-size:.3rem;
+    color:#4A4A4A;
+    font-weight:600;
+    margin-bottom: .04rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.comic-item-content{
+    font-size:.24rem;
+    line-height:.36rem;
+    width:100%;
+    display: -webkit-box;
+    text-overflow:ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.load-more{
+    width:100%;
+    height:.4rem;
+    line-height:.4rem;
+    text-align: center;
+    margin:0 auto 1.4rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

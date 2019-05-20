@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>大漫画</title>
+</head>
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="components/swiper/swiper.min.css">
+<script src="js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+<div id="title">壁纸漫画精选</div>
+<div class="swiper-container" id="swiper">
+    <div class="swiper-wrapper"></div>
+    <div class="swiper-pagination"></div>
+</div>
+<a href="bookTip.html" id="book-tip">防止走丢，强烈建议添加浏览器书签<span class="book-tip2">怎么添加</span></a>
+<div class="title-p clear">
+    <span class="pull-left">热门美图</span>
+    <a href="html/index2.html?flag=1" class="pull-right title-more">查看更多</a>
+</div>
+<div id="hot-area" class="clear">
+
+</div>
+<div class="swiper-container" id="swiper2">
+    <div class="swiper-wrapper"></div>
+    <div class="swiper-pagination"></div>
+</div>
+<div class="title-p clear">
+    <span class="pull-left">热门漫画</span>
+    <a href="html/index2.html?flag=2" class="pull-right title-more">查看更多</a>
+</div>
+<div id="hot-comic-area" class="clear">
+
+    <!--<div class="hot-comic-item pull-left">-->
+        <!--<div class="hot-comic-item-img"></div>-->
+        <!--<div class="hot-comic-item-title">标题标题标题标题标题标题标题标题标题标题标题</div>-->
+        <!--<div class="hot-comic-item-depiction">标题标题标题标题标题标题标题标题标题标题标题</div>-->
+    <!--</div>-->
+</div>
+
+
+<div id="tabBar">
+    <a href="javascript:;" class="tab-item active" id="index">推荐</a>
+    <a href="html/find.html" class="tab-item" id="find">发现</a>
+    <a href="html/mine.html" class="tab-item" id="mine">我的</a>
+</div>
+</body>
+<script src="js/jquery1.12.4.js"></script>
+<script src="components/swiper/swiper.min.js"></script>
+<script>
+
+
+    var Index = function () {
+    };
+    Index.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.loadData()
+    }
+    Index.prototype.reset = function () {
+        var _this = this;
+        this.$swiper = $('#swiper');
+        this.$swiper2 = $('#swiper2');
+        this.$hotArea = $('#hot-area');
+        this.$hotComicArea = $('#hot-comic-area');
+    }
+    Index.prototype.loadData = function () {
+        var _this = this
+        $.ajax({
+            type: 'get',
+            url: 'http://' + host + '/api/home',
+            success: function (res) {
+                console.log(res)
+                if (res.code == '0') {
+                    var data = res.data;
+                    console.log(data)
+                    _this.base_url = data.base_url;
+                    _this.hot_manhua = data.hot_manhua;
+                    _this.init4HotComic();
+                    _this.hot_meitu = data.hot_meitu;
+                    _this.init4HotPic();
+                    _this.middle_banners = data.middle_banners.items;
+                    _this.init4MBanner();
+                    console.log(data.top_banners.items)
+                    _this.top_banners = data.top_banners.items;
+                    _this.init4TBanner();
+                }
+            }
+        })
+    }
+    Index.prototype.init4HotComic = function () {
+        var _this = this;
+        var str = '';
+        for (var i = 0; i < this.hot_manhua.length; i++) {
+            var item = this.hot_manhua[i];
+            str += '<a href="html/menu.html?id=' + item.id + '"  class="hot-comic-item pull-left">' +
+                '   <div class="hot-comic-item-img"><img src="' + this.base_url + item.thumb + '" alt=""></div>' +
+                '   <div class="hot-comic-item-title">' + item.name + '</div>' +
+                '   <div class="hot-comic-item-depiction">' + item.intro + '</div>' +
+                '</a>';
+        }
+        this.$hotComicArea.html(str);
+    }
+    Index.prototype.init4HotPic = function () {
+        var _this = this;
+        var str = '';
+        for (var i = 0; i < this.hot_meitu.length; i++) {
+            var item = this.hot_meitu[i];
+            str += '<a href="html/detailPic.html?id=' + item.id + '" class="hot-item pull-left">' +
+                '   <div class="hot-item-img"><img src="' + this.base_url + item.thumb + '" alt=""></div>' +
+                '   <div class="hot-item-title">' + item.name + '</div>' +
+                '   <div class="hot-item-depiction">' + item.a + '</div>' +
+                '</a>';
+        }
+        this.$hotArea.html(str);
+    }
+    Index.prototype.init4MBanner = function () {
+        var _this = this;
+        var str = '';
+        for (var i = 0; i < _this.middle_banners.length; i++) {
+            var item = _this.middle_banners[i];
+            str += '<div class="swiper-slide"><img src="' + item.path + '"></div>';
+        }
+        _this.$swiper2.find('.swiper-wrapper').append(str);
+        var mySwiper2 = new Swiper('#swiper2', {
+            autoplay: true,//可选选项，自动滑动
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        })
+    }
+    Index.prototype.init4TBanner = function () {
+        var _this = this;
+        var str = '';
+        console.log(this.top_banners)
+        for (var i = 0; i < this.top_banners.length; i++) {
+            var item = this.top_banners[i];
+            str += '<div class="swiper-slide"><img src="' + item.path + '"></div>';
+        }
+        this.$swiper.find('.swiper-wrapper').append(str);
+        var mySwiper = new Swiper('#swiper', {
+            autoplay: true,//可选选项，自动滑动
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        })
+    }
+
+
+    new Index().init()
+
+
+</script>
+</html>

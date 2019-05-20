@@ -1,0 +1,67 @@
+#login-area{
+    height:2.2rem;
+    background: url("../img/mine-purple.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top:.88rem;
+    overflow: hidden;
+}
+.user-avatar{
+    width: 1.15rem;
+    height: 1.15rem;
+    margin:.48rem .3rem 0 .4rem;
+    background: url("../img/user-avatar.png") no-repeat;
+    background-size: 100% 100%;
+}
+.user-info{
+    margin-top:.48rem;
+    width: 5rem;
+    color:#fff;
+    font-weight: bold;
+}
+.user-info span{
+    font-weight: normal;
+}
+.user-info-tel{
+    height:.36rem;
+    font-size:.36rem;
+    font-weight:600;
+    line-height:.36rem;
+    margin-bottom: .1rem;
+}
+.user-info-vip{
+    height: .3rem;
+    line-height: .3rem;
+    font-size: .24rem;
+    margin-bottom: .1rem;
+}
+.user-info-id,.user-info-power{
+    height: .34rem;
+    line-height: .34rem;
+    font-size: .24rem;
+}
+
+
+
+
+.user-logion-word{
+    font-size: .36rem;
+    color:#fff;
+    height:2.2rem;
+    line-height:2.2rem;
+}
+.line-area{
+    width:6.7rem;
+    margin:.1rem auto;
+}
+.line-p{
+    color:#4A4A4A;
+    height:.6rem;
+    line-height:.6rem;
+    font-size: .3rem;
+    padding:0.25rem 0 0.15rem;
+    border-bottom: .01rem solid #979797;
+    background: url("../img/book-tip-right.png") no-repeat;
+    background-position: right center;
+    background-size: .11rem .18rem;
+    font-weight:600;
+}

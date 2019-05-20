@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>已购买的</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<style>
+    /*#custom-area{*/
+        /*margin: .88rem .7rem 0 .4rem;*/
+        /*width:6.4rem;*/
+    /*}*/
+    /*.custom-item{*/
+        /*width:100%;*/
+        /*height:2.44rem;*/
+        /*border-bottom: .01rem solid #979797;*/
+        /*overflow: hidden;*/
+    /*}*/
+    /*.custom-title{*/
+        /*margin-top:.25rem;*/
+        /*height:.7rem;*/
+        /*line-height:.7rem;*/
+        /*font-weight:600;*/
+        /*font-size: .32rem;*/
+
+    /*}*/
+    /*.custom-title2{*/
+        /*height:.44rem;*/
+        /*line-height:.44rem;*/
+        /*font-size: .24rem;*/
+        /*color:#4A4A4A*/
+    /*}*/
+    #collect-area{
+        width:6.7rem;
+        margin:1.28rem auto 0;
+    }
+    /*comic*/
+    .collect-item{
+        padding-bottom:.4rem;
+        margin-bottom:.4rem;
+        overflow: hidden;
+        border-bottom: .01rem solid #979797;
+    }
+    .collect-item-pic,.collect-item-pic img{
+        width:2.4rem;
+        height:1.5rem;
+        margin-right: .2rem;
+    }
+    .collect-item-content-box{
+        width:4.1rem;
+
+    }
+    .collect-item-title{
+        height:.4rem;
+        font-size:.3rem;
+        color:#4A4A4A;
+        font-weight:600;
+        margin-bottom: .04rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .collect-item-content{
+        font-size:.24rem;
+        line-height:.36rem;
+        width:100%;
+        display: -webkit-box;
+        text-overflow:ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    .no-img{
+        width: 2.56rem;
+        height: 1.86rem;
+        background: url("../img/empty.png") no-repeat;
+        background-size: 100% 100%;
+        margin:2.88rem auto .5rem;
+    }
+    .no-tip{
+        width: 100%;
+        height: .48rem;
+        line-height: .48rem;
+        font-size:.28rem;
+        font-weight:400;
+        color:rgba(209,209,209,1);
+        text-align: center;
+    }
+</style>
+<body>
+<div id="title"><span>已购买的</span><a href="javascript:history.go(-1);" id="return-back"></a></div>
+<div id="collect-area">
+
+
+</div>
+
+</div>
+<script src="../js/jquery1.12.4.js"></script>
+<script src="../components/lazyload/lazyload.min.js"></script>
+<script>
+    var Collection = function () {}
+
+    Collection.prototype.init = function () {
+        var _this = this;
+        this.reset();
+    }
+    Collection.prototype.reset = function () {
+        var _this = this;
+        this.$collectArea = $('#collect-area');
+        if(!!getCookie('dmhToken')){
+            _this.token = getCookie('dmhToken');
+            $.ajax({
+                type: 'get',
+                url: 'http://' + host + '/api/client/me',
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("Authorization","bearer " + _this.token);
+                },
+                success: function (res) {
+                    console.log(res)
+                    if(res.code == '0'){
+                        _this.loadData();
+                    }else{//过期了 需要重新登录
+                        _this.loginStatus = '2';
+                        window.location.href = 'login.html';
+                    }
+                }
+            })
+        }else{
+            _this.loginStatus = '2';
+            window.location.href = 'login.html';
+        }
+    }
+    Collection.prototype.loadData = function () {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://' + host + '/api/client/mine',
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization","bearer " + _this.token);
+            },
+            data:{
+                id:_this.id
+            },
+            success: function (res) {
+                console.log(res)
+                if(res.code == '0'){
+                    var data = res.data.data;
+                    if(data.length == '0'){//没有数据
+                        var str = '<div class="no-img"></div><div class="no-tip">您还什么都没有收藏奥，快去收藏吧</div>'
+                        _this.$collectArea.html(str);
+                        return false;
+                    }
+                    var base_url = res.data.base_url;
+                    var str = '';
+                    for (var i =0;i<data.length;i++){
+                        var  item = data[i];
+                        if(item.type == '1'){
+                            str += '<a href="detailPic.html?id=' + item.id + '">';
+                        }else{
+                            str += '<a href="menu.html?id=' + item.id + '">';
+                        }
+                        str += ' <div class="collect-item clear">\n' +
+                            '        <div class="collect-item-pic pull-left"><img class="lazy" data-original="' + base_url + item.thumb + '" alt=""></div>\n' +
+                            '        <div class="collect-item-content-box pull-left">\n' +
+                            '            <div class="collect-item-title">' + item.name + '</div>\n' +
+                            '            <div class="collect-item-content">' + item.intro + '</div>\n' +
+                            '        </div>\n' +
+                            '    </div></a>';
+
+                    }
+                    _this.$collectArea.html(str);
+                    $('img.lazy').lazyload();
+
+
+
+                }
+            }
+        })
+
+
+
+
+    }
+
+
+    new Collection().init();
+
+
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title></title>
+</head>
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/detail.css">
+<link rel="stylesheet" href="../css/detailPic.css">
+<link rel="stylesheet" href="../components/swiper/swiper.min.css">
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+<div id="title-area">
+    <span id="now-num">1</span>/<span id="total-num">1</span>
+    <a href="javascript:history.go(-1);" id="return-back"></a>
+    <!--<a href="javascript:;" download="img" id="downloadBtn">立即下载</a>-->
+</div>
+<div id="content-box" class="swiper-container">
+    <div class="swiper-wrapper"></div>
+</div>
+<a href="../index.html" id="return-index"></a>
+<div id="footer">
+    <div id="collectBtn">收藏</div>
+    <div id="nextBtn">下一话</div>
+</div>
+<form id="payForm" action="" method="post">
+    <input type="text" id="order_no" name="order_no">
+    <input type="text" id="token" name="token">
+    <input name="button" value="提交" id="button">
+</form>
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script src="../components/swiper/swiper.min.js"></script>
+<script>
+
+    var Detail = function () {
+    }
+    Detail.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Event();
+        this.loadLogin();
+    }
+    Detail.prototype.reset = function () {
+        var _this = this;
+        this.id = getQueryString('id');
+        // this.$downloadBtn = $('#downloadBtn');
+        this.$collectBtn = $('#collectBtn');
+        this.$nextBtn = $('#nextBtn');
+        this.$nowNum = $('#now-num');
+        this.$totalNum = $('#total-num');
+        this.activeIndex = 0;//当前第几张 0 1 2 3
+
+        this.$titleArea = $('#title-area');
+        this.$footer = $('#footer');
+        this.$contentBox = $('#content-box');
+    }
+
+    Detail.prototype.init4Event = function () {
+        var _this = this;
+
+        this.$contentBox.off('click').on('click', function (e) {
+            e.stopPropagation();
+            if (_this.$footer.hasClass('hideActive')) {
+                _this.$titleArea.removeClass('hideActive');
+                _this.$footer.removeClass('hideActive');
+            } else {
+                _this.$titleArea.addClass('hideActive');
+                _this.$footer.addClass('hideActive');
+            }
+        })
+
+        this.$collectBtn.off('click').on('click', function (e) {
+            if(_this.loginStatus != '1'){
+                _this.mySwiper2.slideTo(2);
+            }else{
+                // if($(this).hasClass('active')){//已收藏、取消收藏
+                //     _this.collect(false);
+                // }else{
+                    _this.collect(true);
+                // }
+            }
+        })
+        this.$nextBtn.off('click').on('click', function (e) {
+
+        })
+    }
+    Detail.prototype.loadLogin = function(){
+        var _this = this;
+        //判断登陆状态
+        if(!!getCookie('dmhToken')){
+            _this.token = getCookie('dmhToken');
+            $.ajax({
+                type: 'get',
+                url: 'http://' + host + '/api/client/me',
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("Authorization","bearer " + _this.token);
+                },
+                success: function (res) {
+                    console.log(res)
+                    if(res.code == '0'){
+                        if(res.data.login_times == '1'){//有一次免费预约的机会
+                            _this.loginStatus2 = '1';
+                        }
+                        _this.loginStatus = '1';
+                    }else{//过期了 需要重新登录
+                        _this.loginStatus = '2';
+                    }
+                    _this.loadPic();
+                }
+            })
+        }else{
+            _this.loginStatus = '2';
+            _this.loadPic();
+        }
+    }
+    Detail.prototype.loadPic = function () {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://' + host + '/api/client/pictures/' + _this.id,
+            beforeSend: function (XMLHttpRequest) {
+                if(_this.loginStatus == '1'){
+                    XMLHttpRequest.setRequestHeader("Authorization","bearer " + _this.token);
+                }
+            },
+            success: function (res) {
+                if (res.code == '0') {
+                    _this.data = res.data;
+                    this.auth = _this.data.auth;
+                    var base_url = _this.data.base_url;
+                    var items = _this.data.items;
+                    var num = _this.data.num;//总数
+                    _this.$totalNum.html(num);
+                    var str = '';
+                    if (this.auth == '1') {//已购买
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            item.imgUrl = base_url + item.path + "/" + item.name + "." + item.ext;
+                            str += '<div class="swiper-slide">' +
+                                '<img data-src="' + item.imgUrl + '"  class="swiper-lazy">' +
+                                '<div class="swiper-lazy-preloader"></div>' +
+                                '</div>';
+                        }
+                    } else {
+                        for (var i = 0; i < items.length; i++) {
+                            if (i <= 1) {
+                                var item = items[i];
+                                item.imgUrl = base_url + item.path + "/" + item.name + "." + item.ext;
+                                str += '<div class="swiper-slide">' +
+                                    '<img data-src="' + item.imgUrl + '"  class="swiper-lazy">' +
+                                    '<div class="swiper-lazy-preloader"></div>' +
+                                    '</div>';
+                            } else if (i == '2') {
+                                var item = items[i];
+                                item.imgUrl = base_url + item.path + "/" + item.name + "." + item.ext;
+                                str += _this.loadBlurMask(item.imgUrl);
+                            }
+                        }
+                    }
+
+                    // _this.$downloadBtn.attr('src',items[0].imgUrl);
+                    _this.$contentBox.find('.swiper-wrapper').append(str);
+                    if (_this.auth != '1') {
+                        _this.init4BlurMask();
+                    }
+                    _this.mySwiper2 = new Swiper('#content-box', {
+                        // autoplay: true,//可选选项，自动滑动
+                        // loop: true,
+                        lazy: {
+                            loadPrevNext: true,
+                        },
+                        on: {
+                            slideChangeTransitionEnd: function () {
+                                console.log(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+                                _this.$nowNum.html(this.activeIndex + 1);
+                                _this.activeIndex = this.activeIndex;
+                                // _this.$downloadBtn.attr('src',_this.data.items[this.activeIndex].imgUrl);
+                            }
+                        },
+
+                    })
+                }
+            }
+        })
+    }
+    Detail.prototype.loadBlurMask = function (imgUrl) {
+        var _this = this;
+        return '' +
+            '<div class="swiper-slide">' +
+            '<img data-src="' + imgUrl + '"  class="swiper-lazy blur">' +
+            '<div class="swiper-lazy-preloader"></div>' +
+                '<div id="login-mask">' +
+                    '<div id="login-area" class="hide">' +
+                        '<div class="login-area-p-1">· 新用户送一次完整浏览权限 ·</div>' +
+                        '<div class="login-area-p-2">新手机将自动生成新账户，已注册用户直接登录</div>' +
+                        '<div class="login-input-box">' +
+                        '<div class="login-input-p">' +
+                        '<input id="tel" class="login-input" placeholder="请输入您的手机号码" maxlength="11">' +
+                        '</div>' +
+                        '<div class="login-input-p">' +
+                        '<input id="code" class="login-input2 pull-left" placeholder="请输验证码" maxlength="4">' +
+                        '<div id="getCode" class="pull-left">获取验证码</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div id="sure-btn">立即登录</div>' +
+                    '</div>' +
+                    '<div id="no-money-area" class="hide">' +
+                        '<div class="login-area-p-1">· 账号余额不足 ·</div>' +
+                        '<div class="login-area-p-2">您可以购买美图单套浏览权限。</div>' +
+                        '<div class="buy-area">' +
+                        // '<div id="one" class="buy-btn" style="margin:.2rem auto .2rem"><span class="pull-left">单套作品权限</span><span class="pull-right">￥9.9元</span></div>' +
+                        // '<div id="all" class="buy-btn"><span class="pull-left">全栈VIP（3个月）</span><span class="pull-right">￥99元</span></div>' +
+                            '<div class="buy-price"><small>￥</small>2.9<small>元</small></div>' +
+                            '<div class="clear mask-nm-box">' +
+                                '<div id="buy-btn" class="buy-btn">立即购买</div>'+
+                                '<div id="collect-mask-btn" class="pull-left">暂时收藏</div>' +
+                                '<a id="look-mask-btn" class="pull-right" href="index2.html?flag=1">看看其他</a>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="power-area" class="hide">' +
+                        '<div class="power-title">· 您拥有一次免费浏览权限 ·</div>' +
+                        '<div class="clear power-btn-area">' +
+                        '<div id="look-power-btn" class="pull-left">再看看其他</div>' +
+                        '<div id="use-now-btn" class="pull-left">立即使用</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '</div>';
+
+
+    }
+    Detail.prototype.init4BlurMask = function () {
+        var _this = this;
+        this.loginTime = 60;
+        this.loginFlag = true;
+        this.$loginMask = $('#login-mask');
+
+        this.$loginArea = $('#login-area');
+        this.$tel = $('#tel');
+        this.$code = $('#code');
+        this.$getCode = $('#getCode');
+        this.$sureBtn = $('#sure-btn');
+
+        this.$noMoneyArea = $('#no-money-area');
+        this.$collectMaskBtn = $('#collect-mask-btn');
+        this.$lookMaskBtn = $('#look-mask-btn');
+        this.$buyBtn = $('#buy-btn');
+
+        this.$powerArea = $('#power-area');
+        this.$lookPowerBtn = $('#look-power-btn');
+        this.$useNowBtn = $('#use-now-btn');
+
+
+        if(_this.loginStatus != '1'){//未登录
+            this.$loginArea.removeClass('hide');
+            this.$loginArea.off('click').on('click',function (e) {
+                e.stopPropagation();
+            });
+
+
+
+            this.$getCode.off('click').on('click',function (){
+                if(!_this.loginFlag){
+                    return false;
+                }
+                var mobile = _this.$tel.val();
+                if(!/^\d{11}$/.test(mobile)){
+                    alert('请正确填写手机号码');
+                    return false;
+                }
+                _this.loginCutDown();
+                _this.loginFlag = false;
+                $.ajax({
+                    type:'POST',
+                    url:'http://' + host + '/api/smscode',
+                    data:{
+                        mobile:mobile
+                    },
+                    success:function (res) {
+                        if(res.code == '0'){
+                            alert('验证码已发送');
+                        }else{
+                            alert(res.msg);
+                        }
+                    }
+                })
+            })
+
+            this.$sureBtn.off('click').on('click',function () {
+                var mobile = _this.$tel.val();
+                if(!/^\d{11}$/.test(mobile)){
+                    alert('请正确填写手机号码');
+                    return false;
+                }
+                var code = _this.$code.val();
+                if(!/^\d{4}$/.test(code)){
+                    alert('请正确填写验证码');
+                    return false;
+                }
+                $.ajax({
+                    type:'POST',
+                    url:'http://' + host + '/api/login_by_code',
+                    data:{
+                        mobile:mobile,
+                        code:code
+                    },
+                    success:function (res) {
+                        if(res.code == '0'){
+                            console.log(code);
+                            var taccess_token = res.data.access_token;
+                            setCookie('dmhToken',taccess_token);
+                            alert('登陆成功');
+                            window.location.reload()
+                            // _this.loadLogin();
+                        }else{
+                            alert(res.msg);
+                        }
+                    }
+                })
+
+
+            })
+        }else{//登录 判断 有没有浏览权限 和 购买
+            // if(_this.loginStatus2 == '1'){//登录了 且 有一次免费机会
+            //     this.$powerArea.removeClass('hide');
+            //     this.$powerArea.off('click').on('click',function (e) {
+            //         e.stopPropagation();
+            //     });
+            //
+            //
+            // }else{//登陆了 没权限 、只能买
+
+
+            // 现只根据auth来判断 其他都是购买
+            this.$noMoneyArea.removeClass('hide');
+            this.$noMoneyArea.off('click').on('click',function (e) {
+                e.stopPropagation();
+            });
+
+
+            this.$buyBtn.off('click').on('click',function () {
+
+                $.ajax({
+                    type: 'post',
+                    url: 'http://' + host + '/api/client/orders',
+                    beforeSend: function (XMLHttpRequest) {
+                        if (_this.loginStatus == '1') {
+                            XMLHttpRequest.setRequestHeader("Authorization", "bearer " + _this.token);
+                        }
+                    },
+                    data:{
+                        goods_no:_this.id
+                    },
+                    success: function (res) {
+                        console.log(res)
+                        if(res.code == '0'){
+                            var order_no = res.data.order_no;
+
+                            var url = 'http://' + host + '/api/client/wechat-order-pay';
+                            $('#payForm').attr('action',url);
+                            $('#payForm').find('#order_no').val(order_no);
+                            $('#payForm').find('#token').val(_this.token);
+                            $('#payForm').submit();
+                            return false;
+                            $.ajax({
+                                type: 'post',
+                                url: 'http://' + host + '/api/client/wechat-order-pay',
+                                // beforeSend: function (XMLHttpRequest) {
+                                //     if (_this.loginStatus == '1') {
+                                //         XMLHttpRequest.setRequestHeader("Authorization", "bearer " + _this.token);
+                                //     }
+                                // },
+                                // data:{
+                                //     order_no:order_no
+                                // },
+                                data:$('#payForm').serialize(),
+                                success: function (res) {
+                                    console.log(res)
+                                    if(res.code == '0'){
+
+                                        window.location.href = res.data.mweb_url;
+                                        //TODO
+
+                                    }else{
+                                        alert(res.msg);
+                                    }
+                                }
+                            })
+                        }else{
+                            alert(res.msg);
+                        }
+                    }
+                })
+            })
+
+
+            // }
+        }
+    }
+    Detail.prototype.loginCutDown = function () {
+        var _this = this;
+        _this.$getCode.html(_this.loginTime);
+        setTimeout(function () {
+            _this.loginTime--;
+            if(_this.loginTime == '0'){
+                _this.loginFlag = true;
+                _this.$getCode.html('获取验证码');
+                return false;
+            }
+            _this.$getCode.html(_this.loginTime);
+            setTimeout(arguments.callee,1000);
+        },1000)
+    }
+    Detail.prototype.collect = function (flag) {//只收藏、不取消收藏
+        var _this = this;
+        // if(!!flag){//收藏
+            var str = 'favorite';
+        // }else{
+        //     var str = 'unfavorite';
+        // }
+        $.ajax({
+            type: 'post',
+            url: 'http://' + host + '/api/client/' + str + '/picture',
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization","bearer " + _this.token);
+            },
+            data:{
+                id:_this.id
+            },
+            success: function (res) {
+                console.log(res)
+                if(res.code == '0'){
+                    if(!!flag){//收藏
+                        // _this.$collectBtn.addClass('active').html('已收藏');
+                        alert('收藏成功');
+                    }else{
+                        // _this.$collectBtn.removeClass('active').html('收藏');
+                        // alert('取消收藏成功');
+                    }
+                }else{
+                    alert(res.msg);
+                }
+            }
+        })
+    }
+
+    new Detail().init();
+
+
+
+</script>
+</html>

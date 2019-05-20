@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<style>
+    .footer{
+        position: fixed;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: .96rem;
+        font-size: .44rem;
+        line-height: .96rem;
+        color:#2D2B5C;
+        font-weight:600;
+        text-indent: .40rem;
+
+    }
+    #buy-btn{
+        width: 2.40rem;
+        height: .96rem;
+        line-height: .96rem;
+        text-align: center;
+        font-size:.32rem;
+        font-weight:600;
+        color:rgba(255,255,255,1);
+        background: #2D2B5C;
+        text-indent: 0;
+    }
+    .tips{
+        margin: .3rem 0 0 .4rem;
+    }
+    .p-title{
+        height:.50rem;
+        font-size:.30rem;
+        font-weight:600;
+        color:rgba(74,74,74,1);
+        line-height:.50rem;;
+        margin-bottom: .1rem;
+    }
+    .p-tip{
+        height:.38rem;
+        font-size:.24rem;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:.38rem;
+    }
+
+    #content-area{
+        margin-top: .88rem;
+        overflow: hidden;
+    }
+    .buy-choose{
+        margin-top: 108px;
+    }
+
+    .wx-choose{
+        width: 2.22rem;
+        height: 2.12rem;
+        background: url("../img/wx-active.png") no-repeat;
+        background-size: 100% 100%;
+        margin:0 auto 0;
+    }
+
+</style>
+<body>
+    <div id="title"><span>壁纸漫画充值页</span><a href="javascript:history.go(-1);" id="return-back"></a></div>
+    <div id="content-area">
+        <div class="tips">
+            <p class="p-title">充值说明</p>
+            <p class="p-tip">1.亲爱的读者你好，如充值遇到问题，请联系客服。</p>
+            <p class="p-tip">2.未完结作品，平台会陆续更新。</p>
+            <p class="p-tip">3.一旦购买成功，不提供退费服务。</p>
+        </div>
+        <div class="buy-choose">
+            <div class="wx-choose"></div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="pull-left">共计：¥ <span id="price">0.00</span></div>
+        <div id="buy-btn" class="pull-right">立即充值</div>
+    </div>
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script>
+    var Vip = function () {};
+    Vip.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Event();
+    }
+    Vip.prototype.reset = function () {
+        var _this = this;
+        this.id = getQueryString('id');
+        this.price = 0;
+        this.$price = $('#price');
+        this.$buyBtn = $('buy-btn');
+
+
+    }
+    Vip.prototype.init4Event = function () {
+        var _this = this;
+        if(this.id == 1){
+            this.price = '2.90';
+            this.$price.html(this.price);
+        }else if(this.id == 2){
+            this.price = '9.90';
+            this.$price.html(this.price);
+        }
+
+        this.$buyBtn.off('click').on('click',function () {
+
+
+
+
+        })
+    }
+
+
+
+    new Vip().init();
+</script>
+</html>

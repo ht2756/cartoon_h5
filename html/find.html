@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+<link rel="stylesheet" type="text/css" href="../css/find.css"/>
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<body>
+	<div id="title">发现</div>
+	<div id="find-box">
+        <a id="contentA" href="javascript:;"><div id="content-box"><img class="lazy" src="" alt=""></div></a>
+
+	</div>
+    <div id="footer">
+        <div id="nextBtn"></div>
+    </div>
+	<div id="tabBar">
+        <a href="../index.html" class="tab-item" id="index">推荐</a>
+        <a href="javascript:;" class="tab-item active" id="find">发现</a>
+        <a href="mine.html" class="tab-item" id="mine">我的</a>
+    </div>
+    <a href="../index.html" id="return-index"></a>
+    	
+    	
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script src="../components/lazyload/lazyload.min.js"></script>
+<script type="text/javascript">
+	var Find = function () {}
+	Find.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Event();
+        this.find();
+    }
+    Find.prototype.reset = function () {
+        var _this = this;
+        // this.$changeBtn = $('#changeBtn');
+        this.index = 0;
+        this.$nextBtn = $('#nextBtn');
+        this.$contentBox = $('#content-box');
+        this.$contentA = $('#contentA');
+    }
+    Find.prototype.init4Event = function () {
+        var _this = this;
+        // //换一批
+        // this.$changeBtn.off('click').on('click',function () {
+        //
+        // })
+        //下一个
+        this.$nextBtn.off('click').on('click',function () {
+            _this.index++;
+            if(!!_this.dataArr[_this.index]){
+                _this.$contentBox.find('img').attr('data-original',_this.dataArr[_this.index].imgUrl);
+                _this.$contentA.attr('href',_this.dataArr[_this.index].href);
+                $('img.lazy').lazyload();
+            }else{
+                _this.find();
+            }
+        })
+    }
+    Find.prototype.find = function () {
+	    var _this = this;
+	    $.ajax({
+            type:'get',
+            url: 'http://' + host + '/api/discover',
+            success: function (res){
+                console.log(res);
+                if(res.code == '0'){
+                    var data = res.data;
+                    var base_url = data.base_url;
+                    _this.index = 0;
+                    _this.dataArr = [];
+                    var dataItems = data.data;
+                    for(var i=0;i<dataItems.length;i++){
+                        var item = dataItems[i];
+                        var obj = {};
+                        obj.imgUrl = base_url +  item.thumb;
+                        if(item.flag == '1'){//图
+                            obj.href = 'detailPic.html?id=' + item.id;
+                        }else{
+                            obj.href = 'menu.html?id=' + item.id;
+                        }
+                        _this.dataArr.push(obj);
+                        _this.$contentBox.find('img').attr('data-original',_this.dataArr[_this.index].imgUrl);
+                        _this.$contentA.attr('href',_this.dataArr[_this.index].href);
+                        $('img.lazy').lazyload();
+                    }
+                }
+            }
+        })
+    }
+
+
+
+	new Find().init();
+</script>
+</html>

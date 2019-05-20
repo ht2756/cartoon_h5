@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+<script src="../js/adaptive.js"></script>
+<script>
+    // 设计图宽度
+    window['adaptive'].desinWidth = 750;
+    // body 字体大小 会将body字体大小设置为 baseFont / 100 + 'rem'  750的设计图一般设置为28,640的设计图一般设置为24
+    window['adaptive'].baseFont = 28;
+    // 显示最大宽度 可选
+    window['adaptive'].maxWidth = 750;
+    // 初始化
+    window['adaptive'].init();
+</script>
+<style>
+    .footer{
+        position: fixed;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: .96rem;
+        font-size: .44rem;
+        line-height: .96rem;
+        color:#2D2B5C;
+        font-weight:600;
+        text-indent: .40rem;
+
+    }
+    #buy-btn{
+        width: 2.40rem;
+        height: .96rem;
+        line-height: .96rem;
+        text-align: center;
+        font-size:.32rem;
+        font-weight:600;
+        color:rgba(255,255,255,1);
+        background: #2D2B5C;
+        text-indent: 0;
+    }
+    .choose-item{
+        width:6.40rem;
+        height:1.52rem;
+        margin:0 auto;
+        background: url("../img/choose-item.png") no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+    }
+    #content-area{
+        margin-top: .88rem;
+        overflow: hidden;
+    }
+    .choose-item1{
+        margin-top: .7rem;
+    }
+    .choose-item2{
+        margin-top: .43rem;
+    }
+
+    .tips{
+        margin: .3rem 0 0 .4rem;
+    }
+    .p-title{
+        height:.50rem;
+        font-size:.30rem;
+        font-weight:600;
+        color:rgba(74,74,74,1);
+        line-height:.50rem;;
+        margin-bottom: .1rem;
+    }
+    .p-tip{
+        height:.38rem;
+        font-size:.24rem;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:.38rem;
+    }
+
+    .choose-item span.choose-item-active{
+        display: none;
+        width: .96rem;
+        height: .44rem;
+        position: absolute;
+        right: .3rem;
+        top: -.22rem;
+        background: url("../img/choose-item-active.png") no-repeat;
+        background-size: 100% 100%;
+    }
+    .choose-item.active span.choose-item-active{
+        display: block;
+    }
+
+    .choose-price-area{
+        width: 2.4rem;
+        height:1.52rem;
+    }
+    .choose-inforamtion-area{
+        width: 3.8rem;
+        height:1.52rem;
+    }
+
+    .choose-price-now{
+        height:.48rem;
+        font-size:.48rem;
+        font-weight:600;
+        color:rgba(255,255,255,1);
+        line-height:.48rem;
+        text-align: center;
+        margin: .27rem auto .21rem;
+    }
+    .choose-price-original{
+        height:.28rem;
+        font-size:.30rem;
+        font-weight:400;
+        color:rgba(225,225,225,1);
+        line-height:.28rem;
+        margin:0 auto;
+        display: block;
+        text-align: center ;
+    }
+    .choose-information-name{
+        height:.30rem;
+        font-size:.30rem;
+        font-weight:600;
+        color:rgba(74,74,74,1);
+        line-height:.30rem;
+        margin: .2rem 0 .2rem;
+    }
+    .choose-information-tip{
+        height:.20rem;
+        font-size:.20rem;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:.20rem;
+        margin-bottom: .2rem;
+    }
+
+    .choose-information-star{
+        height:.20rem;
+        font-size:.20rem;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:.20rem;
+    }
+    .choose-information-star span{
+        display: inline-block;
+        width: .2rem;
+        height: .2rem;
+        background: url("../img/choose-star.png") no-repeat;
+        background-size: 100% 100%;
+    }
+
+
+
+</style>
+<body>
+    <div id="title"><span>壁纸漫画充值页</span><a href="javascript:history.go(-1);" id="return-back"></a></div>
+    <div id="content-area">
+        <div class="choose-area">
+            <div class="choose-item choose-item1" data-price="2.90">
+                <div class="pull-left choose-price-area">
+                    <p class="choose-price-now">￥2.9元</p>
+                    <del class="choose-price-original">￥9.9元</del>
+                </div>
+                <div class="pull-right choose-inforamtion-area">
+                    <p class="choose-information-name">美图浏览权限</p>
+                    <p class="choose-information-tip">任意单独一套美图浏览权限。</p>
+                    <div class="choose-information-star">推荐指数：<span></span><span></span><span></span><span></span><span></span></div>
+                </div>
+                <span class="choose-item-active"></span>
+            </div>
+            <div class="choose-item choose-item2" data-price="9.90">
+                <div class="pull-left choose-price-area">
+                    <p class="choose-price-now">￥9.9元</p>
+                    <del class="choose-price-original">￥19.9元</del>
+                </div>
+                <div class="pull-right choose-inforamtion-area">
+                    <p class="choose-information-name">漫画浏览权限</p>
+                    <p class="choose-information-tip">任意单独一套漫画浏览权限。。</p>
+                    <div class="choose-information-star">推荐指数：<span></span><span></span><span></span><span></span><span></span></div>
+                </div>
+                <span class="choose-item-active"></span>
+            </div>
+        </div>
+        <div class="tips">
+            <p class="p-title">充值说明</p>
+            <p class="p-tip">1.亲爱的读者你好，如充值遇到问题，请联系客服。</p>
+            <p class="p-tip">2.未完结作品，平台会陆续更新。</p>
+            <p class="p-tip">3.一旦购买成功，不提供退费服务。</p>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="pull-left">共计：¥ <span id="price">0.00</span></div>
+        <div id="buy-btn" class="pull-right">立即充值</div>
+    </div>
+</body>
+<script src="../js/jquery1.12.4.js"></script>
+<script>
+    var Vip = function () {};
+    Vip.prototype.init = function () {
+        var _this = this;
+        this.reset();
+        this.init4Event();
+    }
+    Vip.prototype.reset = function () {
+        var _this = this;
+        this.$chooseItem = $('.choose-item');
+        this.$price = $('#price');
+        this.$buyBtn = $('#buy-btn');
+        this.index = 0;
+
+    }
+    Vip.prototype.init4Event = function () {
+        var _this = this;
+        this.$chooseItem.each(function () {
+            $(this).off('click').on('click',function () {
+                if($(this).hasClass('active')){
+                    return false;
+                }
+                $(this).addClass('active').siblings().removeClass('active');
+                var price = $(this).attr('data-price');
+                _this.$price.html(price);
+                _this.index = $(this).index() + 1;
+            })
+        })
+
+
+        this.$buyBtn.off('click').on('click',function () {
+            if(_this.index == '0'){
+                alert('请先选择')
+                return false;
+            }
+            window.location.href = 'vip2.html?id=' + _this.index;
+        })
+    }
+
+
+
+    new Vip().init();
+</script>
+</html>

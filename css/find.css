@@ -1,0 +1,33 @@
+#find-box{
+	width:6rem;
+	height:9.6rem;
+	border:1px solid rgba(151,151,151,1);
+	margin:1.24rem auto 2.4rem;
+}
+
+#footer{
+	width:7.5rem;
+	height:.98rem;
+	background:#fff;
+	position: fixed;
+	left:0;bottom:1rem;
+}
+
+#nextBtn{
+	display: inline-block;
+	width:.88rem;height:.88rem;
+	line-height: .88rem;
+	position: absolute;
+    left:0;right:0;
+    margin:auto;
+	bottom:.1rem;
+	border-radius: 50%;
+    background: url('../img/find.png') no-repeat;
+    background-size: 100% 100%;
+}
+
+
+#content-box,#content-box img{
+	width: 6rem;
+	height:9.6rem;
+}

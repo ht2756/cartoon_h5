@@ -1,0 +1,183 @@
+#swiper, #swiper2 {
+    width: 7.5rem;
+    height: 3.13rem;
+}
+
+.swiper-slide {
+    width: 7.5rem;
+    height: 3.13rem;
+}
+.swiper-slide img{
+    width: 7.5rem;
+    height: 3.13rem;
+}
+
+#book-tip {
+    display: block;
+    width: 6.4rem;
+    height: .72rem;
+    line-height: .72rem;
+    margin: .4rem auto;
+    background: url("../img/book-tip.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    text-indent: .7rem;
+    font-size: .24rem;
+    color: #fff;
+}
+
+.book-tip2 {
+    display: block;
+    background: url("../img/book-tip2.png") no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1.73rem;
+    height: .72rem;
+    line-height: .72rem;
+    text-align: center;
+    color: #fff;
+    text-indent: 0;
+}
+
+.title-p {
+    width: 6.7rem;
+    height: .4rem;
+    margin: 0 auto;
+    line-height: .4rem;
+    color: #4a4a4a;
+    font-size: .38rem;
+}
+
+.title-more {
+    font-size: .24rem;
+    padding-right: .2rem;
+    color: #9B9B9B;
+    background: url("../img/book-tip-right.png") no-repeat;
+    background-size: .19rem .19rem;
+    background-position: right center;
+}
+
+#hot-area {
+    width: 6.7rem;
+    margin: 0 auto .4rem;
+}
+
+.hot-item {
+    width: 3.1rem;
+    height: 4.84rem;
+    margin-top: .3rem;
+    margin-right: .5rem;
+}
+
+.hot-item:nth-of-type(even) {
+    margin-right: 0;
+}
+
+.hot-item-img, .hot-item-img img {
+    display: block;
+    width: 3.1rem;
+    height: 4.2rem;
+}
+
+.hot-item-title {
+    width: 100%;
+    height: .48rem;
+    line-height: .48rem;
+    font-size: .24rem;
+    color: #4A4A4A;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.hot-item-depiction {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: .26rem;
+    font-size: .24rem;
+    color: #9B9B9B;
+}
+
+#swiper2 {
+    margin-bottom: .4rem;
+
+}
+
+#hot-comic-area {
+    width: 6.7rem;
+    margin: 0 auto 1.4rem;
+}
+
+.hot-comic-item {
+    width: 3.1rem;
+    height: 2.54rem;
+    margin-top: .3rem;
+    margin-right: .5rem;
+}
+
+.hot-comic-item:nth-of-type(even) {
+    margin-right: 0;
+}
+
+.hot-comic-item-img, .hot-comic-item-img img {
+    width: 3.1rem;
+    height: 1.8rem;
+}
+
+.hot-comic-item-title {
+    width: 100%;
+    height: .48rem;
+    line-height: .48rem;
+    font-size: .24rem;
+    color: #4A4A4A;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.hot-comic-item-depiction {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: .26rem;
+    font-size: .24rem;
+    color: #9B9B9B;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
